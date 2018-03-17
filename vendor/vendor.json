@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "KGBsAyAxS+hp4NHh1kbI6nIVDbI=",
+			"path": "github.com/gorilla/mux",
+			"revision": "4dbd923b0c9e99ff63ad54b0e9705ff92d3cdb06",
+			"revisionTime": "2018-03-14T16:31:26Z"
+		},
+		{
+			"checksumSHA1": "lYUMiQOLvV+Okxcm1RQnot+c0ho=",
+			"path": "github.com/jinzhu/gorm",
+			"revision": "52c5c8127cf4aeffde3e0aa9222640832075a90f",
+			"revisionTime": "2018-03-15T14:35:31Z"
+		}
+	],
+	"rootPath": "github.com/zidoshare/go-store"
+}
