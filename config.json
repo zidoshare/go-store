@@ -1,5 +1,0 @@
-{
-  "Mysql":"root:123456@(localhost:3306)/stroe?charset=utf8mb4&parseTime=True&loc=Local",
-  "LogLevel":"info",
-  "RuntimeMode":"dev"
-}

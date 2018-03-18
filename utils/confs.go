@@ -24,7 +24,7 @@ type Configuration struct {
 
 //Load load store base configuration
 func Load() {
-	mysql := flag.String("mysql", "", "the mysql server like \"username:password@(localhost:3306)/stroe?charset=utf8mb4&parseTime=True&loc=Local\"")
+	mysql := flag.String("mysql", "", "the mysql server like \"username:password@(localhost:3306)/store?charset=utf8mb4&parseTime=True&loc=Local\"")
 	logLevel := flag.String("log_level", "", "logging level: trace/debug/info/warn/error/fatal")
 	runtimeMode := flag.String("mode", "", "runtime mode (dev/prod)")
 	path := flag.String("path", "conf.json", "the config path")
