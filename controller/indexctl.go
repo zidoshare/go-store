@@ -3,8 +3,11 @@ package controller
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/zidoshare/go-store/confs"
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello world")
+	currentPage := confs.GetPage(r)
+	fmt.Fprintf(w, "hello world and page is %d", currentPage)
 }

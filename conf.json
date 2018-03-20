@@ -1,5 +1,6 @@
 {
-  "Mysql":"root:123456@(localhost:3306)/store?charset=utf8mb4&parseTime=True&loc=Local",
-  "LogLevel":"info",
-  "RuntimeMode":"dev"
+  "Mysql": "root:123456@(localhost:3306)/store?charset=utf8mb4&parseTime=True&loc=Local",
+  "LogLevel": "info",
+  "RuntimeMode": "dev",
+  "pageSize": 12
 }
