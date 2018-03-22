@@ -7,9 +7,10 @@ import (
 
 //GetItems get item list
 func GetItems(current int) (items []*model.Item, pagination *confs.Pagination) {
+	pageSize := confs.Conf.PageSize
 	offset := (current - 1) * pageSize
 	total := 0
-	if err := db.Count(&total).Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
+	if err := db.Model(&model.Item{}).Count(&total).Limit(pageSize).Offset(offset).Find(&items).Error; err != nil {
 		logger.Errorf("get items failed: " + err.Error())
 	}
 	pagination = &confs.Pagination{
@@ -18,6 +19,13 @@ func GetItems(current int) (items []*model.Item, pagination *confs.Pagination) {
 		Total:    total,
 	}
 	return
+}
+
+//GetItem get item by primary key
+func GetItem(id uint) *model.Item {
+	item := &model.Item{}
+	db.Find(item, id)
+	return item
 }
 
 //AddItem add item

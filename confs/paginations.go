@@ -16,6 +16,9 @@ type Pagination struct {
 func GetPage(r *http.Request) int {
 	vals := r.URL.Query()
 	param := vals["p"]
+	if param == nil {
+		return 1
+	}
 	ret, _ := strconv.Atoi(param[0])
 	if 1 > ret {
 		ret = 1

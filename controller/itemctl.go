@@ -2,7 +2,11 @@ package controller
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"github.com/zidoshare/go-store/confs"
 	"github.com/zidoshare/go-store/model"
@@ -10,35 +14,94 @@ import (
 	"github.com/zidoshare/go-store/service"
 )
 
-//Items get items
-func Items(w http.ResponseWriter, r *http.Request) {
+//GetItems get items
+func GetItems(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	current := confs.GetPage(r)
 	items, pagination := service.GetItems(current)
-	result := confs.Success(&struct{
-		items
-	})
+	result := &confs.Resp{
+		Code:       0,
+		Data:       items,
+		Pagination: pagination,
+	}
 	json.NewEncoder(w).Encode(result)
+}
+
+//GetItem get item by id
+func GetItem(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	item := service.GetItem(uint(id))
+	json.NewEncoder(w).Encode(&confs.Resp{
+		Code: 0,
+		Data: item,
+	})
 }
 
 //AddItem add item
 func AddItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	item := &model.Item{}
-	json.NewDecoder(r.Body).Decode(&item)
-	item.ID = nil
-	item.CreatedAt = nil
-	item.DeletedAt = nil
-	item.UpdatedAt = nil
-	if item.Title == nil || item.Title == "" {
-		json.NewEncoder(w).Encode(confs.Fail())
+	bytes, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
 		return
 	}
-	json.NewEncoder(w).Encode(confs.Success(nil))
+	err = json.Unmarshal(bytes, item)
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	err = service.AddItem(item)
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	if item.Title == "" {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	json.NewEncoder(w).Encode(confs.Resp{
+		Code: 0,
+	})
 }
 
+//DeleteItem delete item
 func DeleteItem(w http.ResponseWriter, r *http.Request) {
-	w.Header.Set("Content-Type", "application/json")
-	r.ParseForm()
-
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	err = service.DeleteItem(uint(id))
+	if err != nil {
+		json.NewEncoder(w).Encode(confs.Resp{
+			Code: -1,
+		})
+		return
+	}
+	json.NewEncoder(w).Encode(confs.Resp{
+		Code: 0,
+	})
 }

@@ -12,10 +12,10 @@ import (
 
 var logger = logs.NewLogger(os.Stdout)
 var db *gorm.DB
-var pageSize = confs.Conf.PageSize
 
 //Connect connect store database
 func Connect() {
+	logger.Debugf("connect to mysql...,url:%s", confs.Conf.Mysql)
 	var err error
 	db, err = gorm.Open("mysql", confs.Conf.Mysql)
 	if nil != err {
@@ -24,7 +24,7 @@ func Connect() {
 	if err = db.AutoMigrate(&model.Item{}, &model.User{}).Error; err != nil {
 		logger.Fatal("auto migrate tables failed: " + err.Error())
 	}
-
+	db.LogMode(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(50)
 }

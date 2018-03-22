@@ -132,7 +132,6 @@ func (l *Logger) Info(v ...interface{}) {
 	if Info < l.level {
 		return
 	}
-
 	l.logger.SetPrefix("Info ")
 	l.logger.Output(2, fmt.Sprint(v...))
 }

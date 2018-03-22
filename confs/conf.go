@@ -20,8 +20,9 @@ type Configuration struct {
 	Mysql       string
 	LogLevel    string
 	RuntimeMode string
-	wait        time.Duration
+	Wait        time.Duration
 	PageSize    int
+	Server      string
 }
 
 // Load load store base configuration
@@ -31,6 +32,7 @@ func Load() {
 	runtimeMode := flag.String("mode", "", "runtime mode (dev/prod)")
 	path := flag.String("path", "conf.json", "the config path")
 	pageSize := flag.Int("page_size", 0, "the page size")
+	listen := flag.String("listen", "", "listening server like \":8080\"")
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
@@ -51,9 +53,14 @@ func Load() {
 	if *runtimeMode != "" {
 		Conf.RuntimeMode = *runtimeMode
 	}
-	Conf.wait = wait
-	if pageSize != nil && *pageSize != 0 {
+	Conf.Wait = wait
+	if *pageSize != 0 {
 		Conf.PageSize = *pageSize
 	}
+
+	if *listen != "" {
+		Conf.Server = *listen
+	}
 	logs.SetLevel(Conf.LogLevel)
+	logger.Debugf("config end... confg:%+v", Conf)
 }
