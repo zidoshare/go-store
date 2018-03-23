@@ -3,5 +3,8 @@
   "LogLevel": "info",
   "RuntimeMode": "dev",
   "PageSize": 12,
-  "Server": ":8080"
+  "Server": ":8080",
+  "Iss": "hy.zido.site",
+  "LoginExp": 7200,
+  "Spwd":"123456"
 }

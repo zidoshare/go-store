@@ -1,4 +1,4 @@
-package confs
+package common
 
 import (
 	"encoding/json"
@@ -13,16 +13,14 @@ type Obj struct {
 
 func TestJsonResp(t *testing.T) {
 	arr := [2]*Obj{&Obj{"str1", 1}, &Obj{"str2", 2}}
-	b, err := json.Marshal(Success(arr))
+	b, err := json.Marshal(&Resp{
+		Data:arr,
+	})
 	if err != nil {
 		t.Error("encoding faild")
 	}
 	fmt.Println(string(b))
 	var Result Resp
 	json.Unmarshal(b, &Result)
-
-	if Result.Code != 0 {
-		t.Error("decoding faild")
-	}
 
 }

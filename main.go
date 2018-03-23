@@ -10,18 +10,18 @@ import (
 	"github.com/zidoshare/go-store/logs"
 
 	"github.com/gorilla/mux"
-	"github.com/zidoshare/go-store/confs"
+	"github.com/zidoshare/go-store/common"
 	"github.com/zidoshare/go-store/controller"
 	"github.com/zidoshare/go-store/service"
 )
 
 var logger = logs.NewLogger(os.Stdout)
 
-// main load confs and start up the server on port 8080
+// main load common and start up the server on port 8080
 func main() {
 
 	//load configuration
-	confs.Load()
+	common.LoadConf()
 	logger.Info("preparing some jobs...")
 	//connect db
 	service.Connect()
@@ -32,7 +32,7 @@ func main() {
 	controller.Load(r)
 	//config server
 	srv := &http.Server{
-		Addr:         confs.Conf.Server,
+		Addr:         common.Conf.Server,
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
@@ -45,7 +45,7 @@ func main() {
 		signal.Notify(c, os.Interrupt)
 		<-c
 
-		ctx, cancel := context.WithTimeout(context.Background(), confs.Conf.Wait)
+		ctx, cancel := context.WithTimeout(context.Background(), common.Conf.Wait)
 		defer cancel()
 
 		srv.Shutdown(ctx)
@@ -53,7 +53,7 @@ func main() {
 		logger.Info("service shutting down ok")
 		os.Exit(0)
 	}()
-	logger.Infof("finish,lisenning on [%s]", confs.Conf.Server)
+	logger.Infof("finish,lisenning on [%s]", common.Conf.Server)
 	if err := srv.ListenAndServe(); err != nil {
 		logger.Error(err)
 	}

@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" //mysql support
-	"github.com/zidoshare/go-store/confs"
+	"github.com/zidoshare/go-store/common"
 	"github.com/zidoshare/go-store/logs"
 	"github.com/zidoshare/go-store/model"
 )
@@ -15,9 +15,9 @@ var db *gorm.DB
 
 //Connect connect store database
 func Connect() {
-	logger.Debugf("connect to mysql...,url:%s", confs.Conf.Mysql)
+	logger.Debugf("connect to mysql...,url:%s", common.Conf.Mysql)
 	var err error
-	db, err = gorm.Open("mysql", confs.Conf.Mysql)
+	db, err = gorm.Open("mysql", common.Conf.Mysql)
 	if nil != err {
 		logger.Fatalf("opens database failed: " + err.Error())
 	}

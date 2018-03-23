@@ -1,4 +1,4 @@
-package confs
+package common
 
 import (
 	"net/http"

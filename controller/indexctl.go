@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/zidoshare/go-store/confs"
+	"github.com/zidoshare/go-store/common"
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	currentPage := confs.GetPage(r)
+	currentPage := common.GetPage(r)
 	fmt.Fprintf(w, "hello world and page is %d", currentPage)
 }
