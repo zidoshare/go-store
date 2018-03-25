@@ -6,15 +6,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"hash"
 	"strings"
 	"time"
 )
 
 //TokenHeader token header
 type TokenHeader struct {
-	Typ string `json:"typ"`  //token type: JWT(JSON Web Token)
-	Alg string `json:"HS256` //secure method
+	Typ string `json:"typ"`   //token type: JWT(JSON Web Token)
+	Alg string `json:"HS256"` //secure method
 }
 
 //TokenPayload token payload
@@ -36,7 +35,7 @@ var (
 	ErrFooBadTokenData = errors.New("token is bad data")
 )
 
-var Cipher hash.Hash = hmac.New(sha256.New, []byte(Conf.Spwd))
+var Cipher = hmac.New(sha256.New, []byte(Conf.Spwd))
 
 //NewToken create default token
 func NewToken(uid uint, role string) (*Token, error) {

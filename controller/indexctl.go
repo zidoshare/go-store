@@ -8,6 +8,6 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	currentPage := common.GetPage(r)
+	currentPage, _ := common.GetPage(r)
 	fmt.Fprintf(w, "hello world and page is %d", currentPage)
 }

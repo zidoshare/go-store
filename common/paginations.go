@@ -13,15 +13,15 @@ type Pagination struct {
 }
 
 // GetPage get page from http.Request
-func GetPage(r *http.Request) int {
+func GetPage(r *http.Request) (int, error) {
 	vals := r.URL.Query()
 	param := vals["p"]
 	if param == nil {
-		return 1
+		return 1, nil
 	}
-	ret, _ := strconv.Atoi(param[0])
+	ret, err := strconv.Atoi(param[0])
 	if 1 > ret {
 		ret = 1
 	}
-	return ret
+	return ret, err
 }
