@@ -6,5 +6,8 @@
   "Server": ":8080",
   "Iss": "hy.zido.site",
   "LoginExp": 7200,
-  "Spwd":"123456"
+  "Spwd": "123456",
+  "Alg": [
+    "HS256"
+  ]
 }

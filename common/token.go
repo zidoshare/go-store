@@ -6,6 +6,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"hash"
+	"math/rand"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -35,14 +38,50 @@ var (
 	ErrFooBadTokenData = errors.New("token is bad data")
 )
 
-var Cipher = hmac.New(sha256.New, []byte(Conf.Spwd))
+//Cipher interface of cipher
+type Cipher interface {
+	init()
+	secure(pre []byte) []byte
+}
+
+//HS256Cipher impl of HS256
+type HS256Cipher struct {
+	hash hash.Hash
+}
+
+func (cipher *HS256Cipher) init() {
+	cipher.hash = hmac.New(sha256.New, []byte(Conf.Spwd))
+}
+
+func (cipher *HS256Cipher) secure(pre []byte) []byte {
+	defer cipher.hash.Reset()
+	return cipher.hash.Sum(pre)
+}
+
+//GetCipher get cipher
+func GetCipher(alg string) (cipher Cipher) {
+	alg = strings.ToUpper(alg)
+	switch alg {
+	case "HS256":
+		cipher = &HS256Cipher{}
+	default:
+		cipher = &HS256Cipher{}
+	}
+	cipher.init()
+	return
+}
 
 //NewToken create default token
 func NewToken(uid uint, role string) (*Token, error) {
 	now := time.Now()
+	arr := Conf.Alg
+	length := len(arr)
+	src := rand.NewSource(time.Now().Unix())
+	current := rand.New(src).Intn(length)
+	alg := strings.ToUpper(arr[current])
 	header := &TokenHeader{
 		Typ: "JWT",
-		Alg: "HS256",
+		Alg: alg,
 	}
 	headerJSON, err := json.Marshal(header)
 	if err != nil {
@@ -67,8 +106,7 @@ func NewToken(uid uint, role string) (*Token, error) {
 
 	preSign := headerStr + tokenSep + payloadStr
 
-	tailStr := base64.StdEncoding.EncodeToString(Cipher.Sum([]byte(preSign)))
-	Cipher.Reset()
+	tailStr := base64.StdEncoding.EncodeToString(GetCipher(alg).secure([]byte(preSign)))
 	token := &Token{
 		header:     header,
 		Payload:    payload,
@@ -124,11 +162,11 @@ func (token *Token) BuildSign() error {
 		logger.Errorf("create token : build payload : json marshal token payload failed:%+v", token.Payload)
 		return ErrFooBadTokenData
 	}
-
+	alg := token.getHeader().Alg
 	headerStr := base64.StdEncoding.EncodeToString(headerJSON)
 	payloadStr := base64.StdEncoding.EncodeToString(payloadJSON)
 	preSign := headerStr + tokenSep + payloadStr
-	token.Sign = base64.StdEncoding.EncodeToString(Cipher.Sum([]byte(preSign)))
+	token.Sign = base64.StdEncoding.EncodeToString(GetCipher(alg).secure([]byte(preSign)))
 	return nil
 }
 
@@ -151,14 +189,19 @@ func TokenFrom(tokenStr string) (token *Token) {
 		token.Valid = false
 		return
 	}
-	rebuildSign := Cipher.Sum([]byte(token.HeaderStr + tokenSep + token.PayloadStr))
+	header, err := ParseHeader(token.HeaderStr)
+	if err != nil {
+		token.Valid = false
+		return
+	}
+
+	rebuildSign := GetCipher(header.Alg).secure([]byte(token.HeaderStr + tokenSep + token.PayloadStr))
 	if base64.StdEncoding.EncodeToString(rebuildSign) != token.Sign {
 		token.Valid = false
 		return
 	}
 
 	token.Valid = true
-	var err error
 	token.Payload, err = ParsePayload(token.PayloadStr)
 	if err != nil {
 		return
@@ -172,14 +215,37 @@ func TokenFrom(tokenStr string) (token *Token) {
 	return
 }
 
-//ParsePayload parse payload from PayloadStr without decoding by base64
-func ParsePayload(PayloadStr string) (payload *TokenPayload, err error) {
+//ParsePayload parse payload from payloadStr without decoding by base64
+func ParsePayload(payloadStr string) (payload *TokenPayload, err error) {
 	payload = &TokenPayload{}
-	jsonStr, dErr := base64.StdEncoding.DecodeString(PayloadStr)
+	jsonStr, dErr := base64.StdEncoding.DecodeString(payloadStr)
 	if err != nil {
 		err = dErr
 		return
 	}
 	err = json.Unmarshal(jsonStr, payload)
+	return
+}
+
+//ParseHeader parse header from headerStr without decoding by base64
+func ParseHeader(headerStr string) (header *TokenHeader, err error) {
+	header = &TokenHeader{}
+	jsonStr, dErr := base64.StdEncoding.DecodeString(headerStr)
+	err = dErr
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(jsonStr, header)
+	return
+}
+
+//ParseToken get payload and update token from request and response
+func ParseToken(w http.ResponseWriter, r *http.Request) (uid uint, role string) {
+	tokenStr := r.Header.Get("token")
+	token := TokenFrom(tokenStr)
+	uid = token.Payload.UID
+	role = token.Payload.Role
+	token.UpdateSign()
+	w.Header().Set("token", token.String())
 	return
 }

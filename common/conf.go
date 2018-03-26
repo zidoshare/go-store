@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/zidoshare/go-store/logs"
@@ -26,6 +27,7 @@ type Configuration struct {
 	Iss         string        //issuer
 	LoginExp    int           //login expiration time (s)
 	Spwd        string        //hs256 password
+	Alg         []string      //array of secure method
 }
 
 // LoadConf load store base configuration
@@ -39,6 +41,7 @@ func LoadConf() {
 	iss := flag.String("iss", "", "set token iss")
 	spwd := flag.String("spwd", "", "secure password")
 	loginExp := flag.Int("login_exp", 0, "login expiration time (s)")
+	alg := flag.String("alg", "", "secure method split by ','")
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
@@ -79,6 +82,9 @@ func LoadConf() {
 
 	if *spwd != "" {
 		Conf.Spwd = *spwd
+	}
+	if *alg != "" {
+		Conf.Alg = strings.Split(*alg, ",")
 	}
 	logs.SetLevel(Conf.LogLevel)
 	logger.Debugf("config end... confg:%+v", Conf)

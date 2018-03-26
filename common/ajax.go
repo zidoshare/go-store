@@ -9,10 +9,14 @@ import (
 type Code int
 
 const (
-	ErrorParam          = 1001 // get param error
-	ErrorParseRequest   = 1002 // parse request params error
-	ErrorParamInValid   = 1003 // param is invalid
-	ErrorResolveRequest = 1005 // resolve request error
+	//ErrorParam get param error
+	ErrorParam = 1001
+	//ErrorParseRequest parse request params error
+	ErrorParseRequest = 1002
+	//ErrorParamInValid param is invalid
+	ErrorParamInValid = 1003
+	//ErrorResolveRequest resolve request error
+	ErrorResolveRequest = 1005
 )
 
 //Resp the REST response model
@@ -21,6 +25,7 @@ type Resp struct {
 	Pagination *Pagination `json:"pagination"`
 }
 
+//RespErr the REST response error model
 type RespErr struct {
 	Code       Code   `json:"code"`       //error code
 	Message    string `json:"message"`    //base message
@@ -58,16 +63,19 @@ func RespondForbidden(w http.ResponseWriter) {
 	RespondError(w, 403, nil)
 }
 
+//RespondNotFound respond 404 status ,can not find the resource
 func RespondNotFound(w http.ResponseWriter) {
 	RespondError(w, 404, nil)
 }
 
+//RespondData response 200 status ,find the resource successfuly
 func RespondData(w http.ResponseWriter, data interface{}) {
 	RespondJSON(w, 200, &Resp{
 		Data: data,
 	})
 }
 
+//RespondPage response 200 status,find a page
 func RespondPage(w http.ResponseWriter, data interface{}, pagination *Pagination) {
 	RespondJSON(w, 200, &Resp{
 		Data:       data,
