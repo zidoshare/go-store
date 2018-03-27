@@ -20,7 +20,7 @@ func GetItems(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		common.RespondBadRequestError(w, &common.RespErr{
 			Code:       common.ErrorParam,
-			Message:    "this param p is bad",
+			Message:    "this param [p] is bad",
 			Additional: "p",
 		})
 		return
@@ -37,7 +37,7 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		common.RespondBadRequestError(w, &common.RespErr{
 			Code:       common.ErrorParam,
-			Message:    "this param id is bad",
+			Message:    "this param [id] is bad",
 			Additional: "id",
 		})
 		return
@@ -72,7 +72,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	if item.Title == "" {
 		common.RespondBadRequestError(w, &common.RespErr{
 			Code:       common.ErrorParamInValid,
-			Message:    "param is invalid",
+			Message:    "this param [title] is invalid",
 			Additional: "title",
 		})
 		return
@@ -97,7 +97,7 @@ func DeleteItem(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		common.RespondBadRequestError(w, &common.RespErr{
 			Code:       common.ErrorParam,
-			Message:    "this param id is bad",
+			Message:    "this param [id] is bad",
 			Additional: "id",
 		})
 		return

@@ -76,7 +76,7 @@ func NewToken(uid uint, role string) (*Token, error) {
 	now := time.Now()
 	arr := Conf.Alg
 	length := len(arr)
-	src := rand.NewSource(time.Now().Unix())
+	src := rand.NewSource(now.Unix())
 	current := rand.New(src).Intn(length)
 	alg := strings.ToUpper(arr[current])
 	header := &TokenHeader{
