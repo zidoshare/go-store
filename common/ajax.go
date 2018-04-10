@@ -31,14 +31,18 @@ type Resp struct {
 func RespondJSON(w http.ResponseWriter, status int, resp *Resp) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(resp)
+	if resp != nil {
+		json.NewEncoder(w).Encode(resp)
+	}
 }
 
 //RespondError write Error and code to response
 func RespondError(w http.ResponseWriter, status int, respErr *RespErr) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(respErr)
+	if respErr != nil {
+		json.NewEncoder(w).Encode(respErr)
+	}
 }
 
 // RespondBadRequestError can usually be returned when the request parameter is invalid or malformed.
