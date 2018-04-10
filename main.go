@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -50,6 +51,7 @@ func main() {
 
 		srv.Shutdown(ctx)
 
+		fmt.Println()
 		logger.Info("service shutting down ok")
 		os.Exit(0)
 	}()

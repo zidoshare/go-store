@@ -17,19 +17,14 @@ const (
 	ErrorParamInValid = 1003
 	//ErrorResolveRequest resolve request error
 	ErrorResolveRequest = 1005
+	//ErrorTokenInvalid token is invalid
+	ErrorTokenInvalid = 1
 )
 
 //Resp the REST response model
 type Resp struct {
 	Data       interface{} `json:"data"`
 	Pagination *Pagination `json:"pagination"`
-}
-
-//RespErr the REST response error model
-type RespErr struct {
-	Code       Code   `json:"code"`       //error code
-	Message    string `json:"message"`    //base message
-	Additional string `json:"additional"` //Additional Information
 }
 
 //RespondJSON write json to response

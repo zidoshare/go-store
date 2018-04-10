@@ -51,7 +51,10 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 //AddItem add item
 func AddItem(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	w.Header().Set("Content-Type", "application/json")
+	ok := checkAdmin(w, r)
+	if !ok {
+		return
+	}
 	item := &model.Item{}
 	bytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -72,7 +75,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	if item.Title == "" {
 		common.RespondBadRequestError(w, &common.RespErr{
 			Code:       common.ErrorParamInValid,
-			Message:    "this param [title] is invalid",
+			Message:    "param is invalid",
 			Additional: "title",
 		})
 		return
@@ -91,6 +94,10 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 
 //DeleteItem delete item
 func DeleteItem(w http.ResponseWriter, r *http.Request) {
+	ok := checkAdmin(w, r)
+	if !ok {
+		return
+	}
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 	id, err := strconv.Atoi(idStr)

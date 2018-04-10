@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"hash"
 	"math/rand"
 	"net/http"
@@ -29,13 +28,6 @@ type TokenPayload struct {
 
 const (
 	tokenSep = "."
-)
-
-var (
-	//ErrFooTokenInvalid token is invalid error
-	ErrFooTokenInvalid = errors.New("token is invalid")
-	//ErrFooBadTokenData token is bad data
-	ErrFooBadTokenData = errors.New("token is bad data")
 )
 
 //Cipher interface of cipher
@@ -240,9 +232,17 @@ func ParseHeader(headerStr string) (header *TokenHeader, err error) {
 }
 
 //ParseToken get payload and update token from request and response
-func ParseToken(w http.ResponseWriter, r *http.Request) (uid uint, role string) {
+func ParseToken(w http.ResponseWriter, r *http.Request) (uid uint, role string, err error) {
 	tokenStr := r.Header.Get("token")
 	token := TokenFrom(tokenStr)
+	if !token.Valid {
+		err = ErrFooTokenInvalid
+		return
+	}
+	if token.Expired {
+		err = ErrFooTokenExpired
+		return
+	}
 	uid = token.Payload.UID
 	role = token.Payload.Role
 	token.UpdateSign()
