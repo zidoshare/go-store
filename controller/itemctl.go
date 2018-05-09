@@ -51,7 +51,7 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 //AddItem add item
 func AddItem(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	ok := checkAdmin(w, r)
+	ok := common.CheckAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -94,7 +94,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 
 //DeleteItem delete item
 func DeleteItem(w http.ResponseWriter, r *http.Request) {
-	ok := checkAdmin(w, r)
+	ok := common.CheckAdmin(w, r)
 	if !ok {
 		return
 	}

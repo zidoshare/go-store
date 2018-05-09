@@ -19,18 +19,6 @@
 			"path": "github.com/jinzhu/gorm",
 			"revision": "52c5c8127cf4aeffde3e0aa9222640832075a90f",
 			"revisionTime": "2018-03-15T14:35:31Z"
-		},
-		{
-			"checksumSHA1": "eECxSkwh0WmhLwaxHfkvcLOWS08=",
-			"path": "github.com/jinzhu/gorm/dialects/mysql",
-			"revision": "52c5c8127cf4aeffde3e0aa9222640832075a90f",
-			"revisionTime": "2018-03-15T14:35:31Z"
-		},
-		{
-			"checksumSHA1": "4eelJOSLZoDzLuaJvgilOBVNovU=",
-			"path": "github.com/jinzhu/inflection",
-			"revision": "04140366298a54a039076d798123ffa108fff46c",
-			"revisionTime": "2018-03-08T03:36:59Z"
 		}
 	],
 	"rootPath": "github.com/zidoshare/go-store"

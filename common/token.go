@@ -249,3 +249,44 @@ func ParseToken(w http.ResponseWriter, r *http.Request) (uid uint, role string, 
 	w.Header().Set("token", token.String())
 	return
 }
+
+func handleToken(w http.ResponseWriter, r *http.Request, exceptedRole string) (uint, bool) {
+	uid, role, err := ParseToken(w, r)
+	if err != nil {
+		RespondUnauthorizedError(w)
+		return 0, false
+	}
+	if strings.Contains(exceptedRole, role) {
+		RespondForbidden(w)
+		return 0, false
+	}
+	return uid, true
+}
+
+//Admin Determine if it is admin
+// return uid(uint)
+func Admin(w http.ResponseWriter, r *http.Request) uint {
+	uid, _ := handleToken(w, r, "admin")
+	return uid
+}
+
+//CheckAdmin Determine if it is admin
+// return true/false
+func CheckAdmin(w http.ResponseWriter, r *http.Request) bool {
+	_, ok := handleToken(w, r, "admin")
+	return ok
+}
+
+//User Determine if it is admin/user
+// return uid(uint)
+func User(w http.ResponseWriter, r *http.Request) uint {
+	uid, _ := handleToken(w, r, "admin|user")
+	return uid
+}
+
+//CheckUser Determine if it is admin/user
+// return true/false
+func CheckUser(w http.ResponseWriter, r *http.Request) bool {
+	_, ok := handleToken(w, r, "admin|user")
+	return ok
+}

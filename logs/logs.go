@@ -38,6 +38,11 @@ func NewLogger(out io.Writer) *Logger {
 	return ret
 }
 
+// NewStdLogger creates a logger and default os.Stdout
+func NewStdLogger() *Logger {
+	return NewLogger(os.Stdout)
+}
+
 // SetLevel sets the logging level of all loggers
 func SetLevel(level string) {
 	logLevel = getLevel(level)

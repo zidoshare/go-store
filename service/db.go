@@ -3,8 +3,8 @@ package service
 import (
 	"os"
 
+	_ "github.com/go-sql-driver/mysql" //mysql support
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql" //mysql support
 	"github.com/zidoshare/go-store/common"
 	"github.com/zidoshare/go-store/logs"
 	"github.com/zidoshare/go-store/model"
@@ -15,7 +15,7 @@ var db *gorm.DB
 
 //Connect connect store database
 func Connect() {
-	logger.Debugf("connect to mysql...,url:%s", common.Conf.Mysql)
+	logger.Infof("connect to mysql...,url:%s", common.Conf.Mysql)
 	var err error
 	db, err = gorm.Open("mysql", common.Conf.Mysql)
 	if nil != err {
