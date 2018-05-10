@@ -20,3 +20,8 @@ type Configuration struct {
 	Spwd        string        //hs256 password
 	Alg         []string      //array of secure method
 }
+
+//Dev return true if current runtime mode is dev
+func Dev() bool {
+	return Conf.RuntimeMode == "dev"
+}

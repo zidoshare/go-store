@@ -12,7 +12,7 @@ var logger = logs.NewStdLogger()
 
 func init() {
 	//load routers
-	logger.Info("load routers...")
+	logger.Info("start loading routers")
 	StoreRouters.HandleFunc("/", index)
 	StoreRouters.HandleFunc("/api/v0/items", GetItems).Methods("GET")
 	StoreRouters.HandleFunc("/api/v0/items/{id}", GetItem).Methods("GET")

@@ -19,7 +19,6 @@ var logger = logs.NewLogger(os.Stdout)
 
 // main start up the server on port 8080
 func main() {
-	logger.Info("prepare all jobs...")
 	//connect db
 	service.Connect()
 	//config server
@@ -48,7 +47,7 @@ func main() {
 		logger.Info("service shutting down ok")
 		os.Exit(0)
 	}()
-	logger.Infof("finish,listenning on [%s]", common.Conf.Server)
+	logger.Infof("Preparation is completed,listenning on [%s]", common.Conf.Server)
 	if err := srv.ListenAndServe(); err != nil {
 		logger.Error(err)
 	}

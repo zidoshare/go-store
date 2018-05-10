@@ -15,7 +15,7 @@ var logger = logs.NewLogger(os.Stdout)
 
 // init load store base configuration
 func init() {
-	logger.Info("load store base configurations...")
+	logger.Info("load store base configurations")
 	mysql := flag.String("mysql", "", "the mysql server like \"username:password@(localhost:3306)/store?charset=utf8mb4&parseTime=True&loc=Local\"")
 	logLevel := flag.String("log_level", "", "logging level: trace/debug/info/warn/error/fatal")
 	runtimeMode := flag.String("mode", "", "runtime mode (dev/prod)")
@@ -41,12 +41,15 @@ func init() {
 	if *logLevel != "" {
 		Conf.LogLevel = *logLevel
 	}
+
 	if *mysql != "" {
 		Conf.Mysql = *mysql
 	}
+
 	if *runtimeMode != "" {
 		Conf.RuntimeMode = *runtimeMode
 	}
+
 	Conf.Wait = wait
 	if *pageSize != 0 {
 		Conf.PageSize = *pageSize
@@ -71,5 +74,13 @@ func init() {
 		Conf.Alg = strings.Split(*alg, ",")
 	}
 	logs.SetLevel(Conf.LogLevel)
-	logger.Debugf("config end... confg:%+v", Conf)
+	logger.Debugf("current log level -> %s", Conf.LogLevel)
+	logger.Debugf("current mysql connection -> %s,", Conf.Mysql)
+	logger.Debugf("current runtime mode -> %s", Conf.RuntimeMode)
+	logger.Debugf("current pageSize -> %d", Conf.PageSize)
+	logger.Debugf("current server -> %s", Conf.Server)
+	logger.Debugf("current iss -> %s", Conf.Iss)
+	logger.Debugf("current loginExp -> %d", Conf.LoginExp)
+	logger.Debugf("current alg -> %s", strings.Join(Conf.Alg, ","))
+	logger.Debugf("current spwd -> %s", Conf.Spwd)
 }
