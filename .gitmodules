@@ -1,0 +1,6 @@
+[submodule "go-store-client"]
+	path = go-store-client
+	url = git@gitee.com:zihyu/go-store-client.git
+[submodule "go-store-admin-client"]
+	path = go-store-admin-client
+	url = https://gitee.com/zihyu/go-store-admin-client.git
