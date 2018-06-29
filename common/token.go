@@ -111,7 +111,7 @@ func NewToken(uid uint, role string) (*Token, error) {
 	return token, nil
 }
 
-//Token token obj
+//Token object
 type Token struct {
 	header     *TokenHeader // Will not resolve the first time,need call func getHeader
 	HeaderStr  string
@@ -181,7 +181,7 @@ func TokenFrom(tokenStr string) (token *Token) {
 		token.Valid = false
 		return
 	}
-	header, err := ParseHeader(token.HeaderStr)
+	header, err := parseHeader(token.HeaderStr)
 	if err != nil {
 		token.Valid = false
 		return
@@ -194,7 +194,7 @@ func TokenFrom(tokenStr string) (token *Token) {
 	}
 
 	token.Valid = true
-	token.Payload, err = ParsePayload(token.PayloadStr)
+	token.Payload, err = parsePayload(token.PayloadStr)
 	if err != nil {
 		return
 	}
@@ -207,8 +207,8 @@ func TokenFrom(tokenStr string) (token *Token) {
 	return
 }
 
-//ParsePayload parse payload from payloadStr without decoding by base64
-func ParsePayload(payloadStr string) (payload *TokenPayload, err error) {
+//parse payload from payloadStr without decoding by base64
+func parsePayload(payloadStr string) (payload *TokenPayload, err error) {
 	payload = &TokenPayload{}
 	jsonStr, dErr := base64.StdEncoding.DecodeString(payloadStr)
 	if err != nil {
@@ -219,8 +219,8 @@ func ParsePayload(payloadStr string) (payload *TokenPayload, err error) {
 	return
 }
 
-//ParseHeader parse header from headerStr without decoding by base64
-func ParseHeader(headerStr string) (header *TokenHeader, err error) {
+//parse header from headerStr without decoding by base64
+func parseHeader(headerStr string) (header *TokenHeader, err error) {
 	header = &TokenHeader{}
 	jsonStr, dErr := base64.StdEncoding.DecodeString(headerStr)
 	err = dErr
