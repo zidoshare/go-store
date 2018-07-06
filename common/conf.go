@@ -22,6 +22,6 @@ type Configuration struct {
 }
 
 //Dev return true if current runtime mode is dev
-func Dev() bool {
-	return Conf.RuntimeMode == "dev"
+func (c *Configuration) Dev() bool {
+	return c.RuntimeMode == "dev"
 }

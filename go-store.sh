@@ -38,7 +38,7 @@ checkNodeModules(){
 
 runServer(){
   cd $DIR
-  go run *.go
+  go run main.go
 }
 
 runClient(){

@@ -13,7 +13,7 @@ import (
 var logger = logs.NewLogger(os.Stdout)
 var db *gorm.DB
 
-//Connect connect store database
+//Connect store database
 func Connect() {
 	logger.Infof("connect to mysql,url:%s", common.Conf.Mysql)
 	var err error
@@ -24,12 +24,12 @@ func Connect() {
 	if err = db.AutoMigrate(&model.Item{}, &model.User{}).Error; err != nil {
 		logger.Fatal("auto migrate tables failed: " + err.Error())
 	}
-	db.LogMode(common.Dev())
+	db.LogMode(common.Conf.Dev())
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(50)
 }
 
-//DisConnect desconnect store database
+//DisConnect store database
 func DisConnect() {
 	logger.Info("disconnect from database")
 	if err := db.Close(); nil != err {
