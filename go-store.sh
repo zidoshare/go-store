@@ -22,6 +22,7 @@ sub(){
   if [[ $(ls -A go-store-client) == "" || $(ls -A go-store-client) == "" ]] 
   then
   echo "update submodules"
+  git submodule init
   git submodule update
   fi
 }
