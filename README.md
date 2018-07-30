@@ -18,7 +18,7 @@ golang实现的微商店，目前正处于开发中...
 
 为了更好的运行开发，我写了[shell脚本(go-store.sh)](https://github.com/zidoshare/go-store/blob/master/go-store.sh)，包含了一些常用操作。
 
-一般来说只需要手动安装golang/nodejs/cnpm，其他就交给shell好了。
+一般来说只需要手动安装golang/nodejs/yarn，其他就交给shell好了。
 
 |命令|功能|备注|
 |---|---|----|

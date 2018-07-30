@@ -33,7 +33,7 @@ checkNodeModules(){
   if [[ ! -d "node_modules" ]]
   then
   echo "download update node modules"
-  cnpm install
+  yarn install
   fi
 }
 
@@ -56,6 +56,11 @@ runAdminClient(){
   npm run start
 }
 
+pushCommit(){
+  cd $DIR/
+  git push --recurse-submodules=on-demand
+}
+
 case "$1" in 
   sub) 
   sub
@@ -64,6 +69,9 @@ case "$1" in
   run:client)
   runClient
   ;;
+  push)
+  pushCommit
+  ;;
   run:server)
   runServer
   ;; 
@@ -71,7 +79,7 @@ case "$1" in
   runAdminClient
   ;; 
   *) 
-  echo "command: sub" 
+  echo "command: sub|run:client|run:client:admin|run:server|push" 
   exit 1 
   ;;
   esac
