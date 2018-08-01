@@ -21,7 +21,7 @@ func Connect() {
 	if nil != err {
 		logger.Fatalf("opens database failed: " + err.Error())
 	}
-	if err = db.AutoMigrate(&model.Item{}, &model.User{}).Error; err != nil {
+	if err = db.AutoMigrate(&model.Item{}, &model.User{}, &model.ItemInfo{}).Error; err != nil {
 		logger.Fatal("auto migrate tables failed: " + err.Error())
 	}
 	db.LogMode(common.Conf.Dev())

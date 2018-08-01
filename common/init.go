@@ -1,3 +1,4 @@
+//Package common provide some common support
 package common
 
 import (
@@ -12,9 +13,15 @@ import (
 )
 
 var logger = logs.NewLogger(os.Stdout)
+var _testing = false
 
 // init load store base configuration
 func init() {
+	logs.SetLevel("info")
+	if _testing {
+		logger.Info("testing,skip init")
+		return
+	}
 	logger.Info("load store base configurations")
 	mysql := flag.String("mysql", "", "the mysql server like \"username:password@(localhost:3306)/store?charset=utf8mb4&parseTime=True&loc=Local\"")
 	logLevel := flag.String("log_level", "", "logging level: trace/debug/info/warn/error/fatal")
