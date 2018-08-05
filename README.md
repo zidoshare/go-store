@@ -1,6 +1,7 @@
 # go-store
 
 [拙劣的功能概览](https://github.com/zidoshare/go-store/blob/master/doc/%E5%8A%9F%E8%83%BD%E6%A6%82%E8%A7%88.md)
+[develop document](https://github.com/zidoshare/go-store/blob/master/doc/develop.md)
 golang实现的微商店，目前正处于开发中...
 
 为什么开发？
